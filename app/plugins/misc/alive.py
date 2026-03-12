@@ -19,6 +19,23 @@ from app import BOT, Config, Message, bot, extra_config
 PY_VERSION = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
 
 
+def _uptime_str() -> str:
+    try:
+        with open("/proc/uptime") as f:
+            secs = float(f.read().split()[0])
+        d, rem = divmod(int(secs), 86400)
+        h, rem = divmod(rem, 3600)
+        m, s = divmod(rem, 60)
+        parts = []
+        if d: parts.append(f"{d}d")
+        if h: parts.append(f"{h}h")
+        if m: parts.append(f"{m}m")
+        parts.append(f"{s}s")
+        return " ".join(parts)
+    except Exception:
+        return "N/A"
+
+
 @bot.add_cmd(cmd="alive")
 async def alive(bot: BOT, message: Message):
     """
@@ -30,7 +47,6 @@ async def alive(bot: BOT, message: Message):
         Inline if on dual mode:
             @bot_name inline_alive
     """
-    # Inline Alive if Dual Mode
     if bot.is_user and getattr(bot, "has_bot", False):
         inline_result: BotResults = await bot.get_inline_bot_results(bot=bot.bot.me.username, query="inline_alive")
         await bot.send_inline_bot_result(
@@ -75,9 +91,9 @@ if _bot.is_bot:
 async def get_alive_text() -> str:
     user_info = await bot.get_users(user_ids=Config.OWNER_ID)
     return (
-        f"<b><a href='{Config.UPSTREAM_REPO}'>Plain-UB</a></b>, "
-        f"A simple Telegram User-Bot by Meliodas.\n"
+        f"<b><a href='{Config.UPSTREAM_REPO}'>Plain-UB</a></b> • fork by rmux\n"
         f"\n › User            :   <code>{user_info.first_name}</code>"
+        f"\n › Uptime        :   <code>{_uptime_str()}</code>"
         f"\n › Python        :   <code>v{PY_VERSION}</code>"
         f"\n › Pyrogram   :   <code>v{pyro_version}</code>"
         f"\n › Core            :   <code>v{core_version}</code>"
@@ -89,7 +105,7 @@ def get_alive_buttons(client: BOT):
         return
     return InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton(text="UB-Core", url=Config.UPDATE_REPO)],
-            [InlineKeyboardButton(text="Support Group", url="t.me/plainub")],
+            [InlineKeyboardButton(text="Plain-UB", url=Config.UPDATE_REPO)],
+            [InlineKeyboardButton(text="rmux's fork", url=Config.UPSTREAM_REPO)],
         ]
     )
