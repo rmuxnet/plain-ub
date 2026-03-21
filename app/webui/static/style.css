@@ -1,0 +1,62 @@
+/* GLOBAL SETTINGS */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Force HTML and BODY to be pure black to prevent overscroll whiteness on mobile */
+html,
+body {
+    background-color: #000000 !important;
+    color: #e5e5e5;
+}
+
+/* Custom Text Selection Color (White background, Black text) */
+::selection {
+    background: #ffffff;
+    color: #000000;
+}
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* UTILITIES */
+.text-dim {
+    color: #666666;
+}
+
+.text-terminal {
+    color: #cccccc;
+}
+
+/* STATUS ANIMATION */
+/* Defines the hard blink logic */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Overrides Tailwind's default soft fade with your hard blink */
+.animate-pulse {
+    animation: blink 1.5s infinite;
+}

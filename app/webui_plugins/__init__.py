@@ -1,0 +1,1 @@
+# WebUI plugins namespace
